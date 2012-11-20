@@ -1,0 +1,420 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>The Next SoundCloud, our take on AMD, Backbone and build scripts</title>
+
+		<meta name="description" content="The Next SoundCloud, our take on AMD, Backbone and build scripts">
+		<meta name="author" content="Misha Reyzlin">
+
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+		<link rel="stylesheet" href="css/reveal.min.css">
+		<link rel="stylesheet" href="css/theme/beige.css" id="theme">
+
+		<!-- For syntax highlighting -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- If the query includes 'print-pdf', use the PDF print sheet -->
+		<script>
+			document.write( '<link rel="stylesheet" href="css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+		</script>
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+
+    <style>
+    #logo {
+      position:fixed;
+      width:140px;
+      bottom:20px;
+      left:20px;
+      opacity: .8;
+    }
+    h2, h3 {
+      text-transform: none!important;
+      white-space: nowrap;
+    }
+    .reveal .slides {
+      width:90%;
+      font-size:1.5em;
+    }
+    .slides > section {
+      min-height:600px;
+    }
+    h1 {
+      text-transform: none!important;
+    }
+    </style>
+	</head>
+
+	<body>
+    <img id="logo" src="assets/logo.png">
+
+		<div class="reveal">
+
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+
+				<section>
+					<h1>The Next SoundCloud</h1>
+          <h2>Our take on build scripts,<br>AMD and MVC</h2>
+          <p><small>November 2012</small></p>
+				</section>
+
+				<section>
+          <h1>Misha Reyzlin</h1><br>
+          <div style="overflow:hidden;">
+            <div style="float:left;max-width:55%;text-align:left">
+              <p>Front End Engineer, <br>HTML5 team, SoundCloud</p>
+              <p><a href="http://github.com/gryzzly">github.com/gryzzly</a></p>
+              <p><a href="http://twitter.com/gryzzly">@gryzzly</a></p>
+              <p>Living in Berlin ❤</p>
+            </div>
+            <img src="assets/me.jpg" style="float:right;max-width:40%;">
+          </div>
+					<!-- <aside class="notes">
+						Oh hey, these are some notes. They'll be hidden in your presentation, but you can see them if you open the speaker notes window (hit 's' on your keyboard).
+					</aside> -->
+				</section>
+
+				<!-- Example of nested vertical slides -->
+				<section>
+					<h1>Subjects</h1>
+          <div class="overflow:hidden;">
+            <div style="float:left;max-width:49%">
+              Next SoundCloud:
+              <img src="assets/next.sc.png">
+            </div>
+            <div style="float:right;max-width:49%;">
+              HTML5 Widget:
+              <img src="assets/html5.widget.png">
+            </div>
+          </div>
+				</section>
+
+				<section>
+          <h1>Fat Client</h1>
+          <ul>
+            <li>Dependencies</li>
+            <li>Dev vs Production Environment</li>
+            <li>Backbone modules</li>
+          </ul>
+				</section>
+
+        <!--
+        =======================================================================
+        = Dependencies                                                        =
+        =======================================================================
+        -->
+
+        <style>
+          .deps ul {
+            text-align: left;
+            margin:0;
+            display: block;
+          }
+        </style>
+
+        <section class="deps">
+          <h4>Dependencies</h4>
+          <h2>&lt;script&gt; tags</h2>
+          <img src="assets/script-tag.png">
+        </section>
+
+        <section class="deps">
+          <h4>Dependencies</h4>
+          <h2>&lt;script&gt; tags</h2>
+          <ul>
+            <li>Manual ordering</li>
+            <li>Lots of synchronous requests (resolved by building)</li>
+            <li>File names and JS code aren't aware of each other</li>
+            <li>Must load everything (no conditions)</li>
+          </ul>
+        </section>
+
+        <section class="deps">
+          <h4>Dependencies</h4>
+          <h2>Script loaders <br>($LAB.js, script.js etc.)</h2>
+        </section>
+
+        <section class="deps">
+          <h4>Dependencies</h4>
+          <img src="assets/lab.js.png">
+        </section>
+
+        <section class="deps">
+          <h4>Dependencies</h4>
+          <div style="position:relative">
+            <p>Better, but still</p>
+            <ul>
+              <li>Manual ordering</li>
+              <li>File names and JS code aren't aware of each other</li>
+            </ul>
+          </div>
+        </section>
+
+        <section>
+          <h4>Dependencies</h4>
+          <h2>Modules (AMD + common.js)</h2>
+          <ul>
+            <li class="fragment">Clear overview of dependencies</li>
+            <li class="fragment">Wrap code in closure and extract piece of functionality as a property of <code>exports</code>)</li>
+            <li class="fragment">Not only JS can be loaded – templates, CSS (wait for it)</li>
+          </ul>
+          <aside class="notes">
+            Promotes best practices.<br>
+            Writing tinyclient widget, just swapped different modules, a piece from Backbone, a piece from underscore, a piece from `component`.
+          </aside>
+        </section>
+
+        <section>
+          <h4>Dependencies</h4>
+          <h2>Modules (AMD + common.js)</h2>
+          <p>We use require.js and almond.js</p>
+          <aside class="notes">
+            Who here is using or familiar with require.js or almond.js?
+          </aside>
+        </section>
+
+        <section>
+          <h4>Dependencies</h4>
+          <img src="assets/amd.typing.png">
+          <p style="text-align:left;">^ Not DRY, easily automated</p>
+        </section>
+
+        <section>
+          <h4>Dependencies</h4>
+          <h2>Development Server</h2>
+          <img src="assets/write.commonjs.png" style="height:116px">
+          <p>Becomes</p>
+          <img src="assets/get.amd.png" style="height:226px">
+        </section>
+
+        <!--
+        =======================================================================
+        = Environments                                                        =
+        =======================================================================
+        -->
+
+        <section>
+          <h4>Environments</h4>
+          <h2>Build script</h2>
+          <ul>
+          <li>Also node.js => can reuse configs from development server
+          <li>Resulting app is just HTML/CSS/JS talking to API
+          <aside class="notes">
+            We tried using other build technologies, ANT etc. but tooling in familiar language is a better idea.
+          </aside>
+        </section>
+
+        <section>
+          <h4>Environments</h4>
+          <h2>Build Optimizations</h2>
+          <ul>
+          <li>Use Uglify.js to parse code into AST (Abstract Syntax Tree, think DOM for JS)
+          <li>^ configs shared with development server
+          <li>Inspect and manipulate from there
+          </ul>
+        </section>
+
+        <section>
+          <h4>Build Optimizations</h4>
+          <h2>`ast_mangle`</h2>
+          <p>Substitute constants with respective values</p>
+          <img src="assets/pre-mangled.png">
+          <img src="assets/mangled.png">
+          <aside class="notes">
+            You don't want to have debugging code and if/else forks for things like client_id in production, they only add bytes to the minified script.
+          </aside>
+        </section>
+
+        <section>
+          <h4>Buiild optimizations</h4>
+          <h2>`ast_squeeze`</h2>
+          <p>Mangled dead code removal and more</h2>
+          <img src="assets/mangled.png">
+          <img src="assets/squeezed.png">
+          <aside>
+            Resulting mangled if (false) {} code is removed by squeezing.
+          </aside>
+        </section>
+
+        <section>
+          <h4>Buiild optimizations</h4>
+          <h2>Lazy evaluation of AMD modules</h2>
+          <p>by Tobie Langel @tobie</p>
+          <p>When in production</p>
+          <div style="overflow:hidden">
+            <img src="assets/loading.png" style="float:left; width:44%">
+            <img src="assets/lazy-loading.png" style="float:right; width:44%">
+          </div>
+          <small><a href="http://calendar.perfplanet.com/2011/lazy-evaluation-of-commonjs-modules/">http://calendar.perfplanet.com/2011/lazy-evaluation-of-commonjs-modules/</a></small>
+        </section>
+
+        <!--
+        =======================================================================
+        = Backbone Modules                                                    =
+        =======================================================================
+        -->
+
+        <section>
+          <h4>Backbone Modules</h4>
+          <h2>Views as Components</h2>
+          <ul>
+            <li>Independent and reusable</li>
+            <li>Can include subviews <small>and subviews… <small>and subviews…</small></small></li>
+            <li>Mostly very small (some quite big)</li>
+            <li>Must play nice</li>
+          </ul>
+          <aside class="notes">
+            <li>Views know to detach event handlers that reference the view.
+            <li>Views shouldn't know anything about what happens outside the view</li>
+            <li>Can style subviews, never depend on parents</li>
+          </aside>
+        </section>
+
+        <section>
+          <h4>Backbone Modules</h4>
+          <h2>Coding Style</h2>
+          <img src="assets/code-style.png">
+        </section>
+
+        <section>
+          <h4>Templates</h4>
+          <h2>Handlebars</h2>
+          <ul>
+            <li>Neat, <em>almost</em> logic-less templates</li>
+            <li>Pre-compiled for speed – faster to render, smaller to deliver</li>
+            <li>Custom helpers</li>
+            <li><code>require</code>d as AMD module (as they are compiled to&nbspJS)</li>
+          </ul>
+        </section>
+
+        <section>
+          <h4>Backbone Modules</h4>
+          <h2>CSS AMD modules?</h2>
+          <img src="assets/css-amd.png">
+        </section>
+
+        <section>
+          <h4>Backbone Modules</h4>
+          <h2>CSS AMD modules!</h2>
+          <img src="assets/css.png">
+          <p>Writing CSS, dev server / build script wrap it with AMD definition</p>
+        </section>
+
+        <section>
+          <h4>Backbone Modules</h4>
+          <h2>Views added via Templates</h2>
+          <img src="assets/views-templates.png">
+        </section>
+
+        <section>
+          <h4>Backbone Modules</h4>
+          <h2>Reusable views with shared model</h2>
+          <img src="assets/soundcloud.png">
+        </section>
+
+        <section>
+          <h4>Backbone Modules</h4>
+          <h2>Reusable views with shared model</h2>
+          <img src="assets/model.png">
+        </section>
+
+        <section>
+          <h4>Backbone Modules</h4>
+          <h2>Models</h2>
+          <p>Identity map behaviour</p>
+          <img src="assets/identity-map.png">
+        </section>
+
+        <section>
+          <h4>Backbone Modules</h4>
+          <h2>Models</h2>
+          <p>Identity map behaviour – how?</p>
+          <img src="assets/identity-map-how.png">
+        </section>
+
+        <section>
+          <h4>Backbone Modules</h4>
+          <h2>Models</h2>
+          <ul>
+            <li>Models fetched once, rendered many times</li>
+            <li>Different views synced through model events</li>
+            <li>Nice side effect – full use of response</li>
+          </ul>
+        </section>
+
+        <section>
+          <h4>Backbone Modules</h4>
+          <h2>Models</h2>
+          <p>Sub-resource in response</p>
+          <img src="assets/sub-resource.png">
+          <aside class="notes">special property `submodelMap`, maps response property to another `ModelClass`</aside>
+        </section>
+
+        <section>
+          <h4>Backbone Modules</h4>
+          <h2>Views only use what they need</h2>
+          <img src="assets/model-required.png">
+          <aside class="notes">Compact representation of sound can come as part of Playlist model, so no need to do additional fetches to only show track title</aside>
+        </section>
+
+        <section>
+          <h4>Backbone Modules</h4>
+          <h2>Models Releasing</h2>
+          <ul>
+            <li>Instance store must let go at some point</li>
+            <li>When a model is “constructed”: <code>usage++</code>
+            <li>When a model is “released”: <code>usage--</code>
+            <li>Periodically, remove unused models
+        </section>
+
+        <section>
+          <br>
+          <h2>SoundCloud + JavaScript = ❤</h2>
+          <br>
+          <h2>Thanks!</h2>
+          <a href="http://soundcloud.com/jobs">http://soundcloud.com/jobs</a>
+        </section>
+
+
+			</div>
+
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.min.js"></script>
+
+		<script>
+
+			// Full list of configuration options available here:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+				theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+				transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/none
+
+				// Optional libraries used to extend on reveal.js
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/showdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+					{ src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+					// { src: 'plugin/remotes/remotes.js', async: true, condition: function() { return !!document.body.classList; } }
+				]
+			});
+
+		</script>
+
+	</body>
+</html>
